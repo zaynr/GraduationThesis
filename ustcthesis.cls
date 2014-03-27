@@ -9,8 +9,6 @@
 %   Last Modified
 %       2014.03.27 by ywg@USTC
 %
-%       $Id$
-%
 \NeedsTeXFormat{LaTeX2e}[1999/12/01]
 \ProvidesClass{ustcthesis}[2014/03/26 USTCthesis document class. Created: 2014.03.26 by ywg@USTC, Last Modified: 2014.03.27 by ywg@USTC]
 
