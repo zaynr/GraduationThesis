@@ -1,2 +1,2 @@
-latexmk -xelatex main.tex
+latexmk main
 call clean
