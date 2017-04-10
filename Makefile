@@ -1,21 +1,47 @@
-#
-# Makefile for LaTeX template of USTC thesis
-#
-# Reference:
-#	1. http://tex.stackexchange.com/questions/40738/
-#	2. Manual of latexmk
-#
+.PHONY : main cls doc clean all inst install distclean zip FORCE_MAKE
 
-.PHONY: main.pdf cover.pdf all clean
+NAME = ustcthesis
+UTREE = $(shell kpsewhich --var-value TEXMFHOME)
+LOCAL = $(shell kpsewhich --var-value TEXMFLOCAL)
 
-all: main.pdf cover.pdf
+main : cls FORCE_MAKE
+	latexmk -xelatex -shell-escape -use-make
 
-main.pdf: main.tex
-	latexmk -xelatex -shell-escape -use-make $^
+all : main doc
 
-cover.pdf: cover.tex
-	latexmk -xelatex -shell-escape -use-make $^
+cls : $(NAME).cls
 
-clean:
+doc : $(NAME).pdf
+
+$(NAME).cls : $(NAME).dtx
+	xetex $<
+
+$(NAME).pdf : $(NAME).dtx FORCE_MAKE
+	latexmk -xelatex $<
+
+clean :
 	latexmk -c
-	-rm *.bbl *.loa
+	latexmk -c $(NAME).dtx
+
+distclean :
+	latexmk -C
+	latexmk -C $(NAME).dtx
+
+inst : cls doc
+	mkdir -p $(UTREE)/{tex,source,doc}/latex/$(NAME)
+	cp $(NAME).dtx $(UTREE)/source/latex/$(NAME)
+	cp $(NAME).cls $(UTREE)/tex/latex/$(NAME)
+	cp $(NAME).pdf $(UTREE)/doc/latex/$(NAME)
+
+install : cls doc
+	sudo mkdir -p $(LOCAL)/{tex,source,doc}/latex/$(NAME)
+	sudo cp $(NAME).dtx $(LOCAL)/source/latex/$(NAME)
+	sudo cp $(NAME).cls $(LOCAL)/tex/latex/$(NAME)
+	sudo cp $(NAME).pdf $(LOCAL)/doc/latex/$(NAME)
+
+zip : cls doc
+	mkdir $(NAME)
+	cp -r $(NAME).{dtx,cls,pdf} ustc*.bst README.md main.tex ustcextra.sty \
+		bib chapters figures .latexmkrc Makefile $(NAME)
+	zip -r ../$(NAME).zip $(NAME)
+	rm -r $(NAME)
