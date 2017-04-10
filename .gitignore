@@ -1,6 +1,5 @@
-ustcthesis.pdf
-main.pdf
-demoThesis
+*.pdf
+/demoThesis
 *.hd
 *.xdv
 
