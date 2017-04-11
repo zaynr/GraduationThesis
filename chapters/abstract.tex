@@ -11,22 +11,18 @@
 
 本文内容包括了对于所采取的实体关系抽取系统（ZORE）的介绍及其实现，以及关于 ZORE 所需组件的介绍，并将其应用在实际工程中。
 
-\keywords{开放式关系抽取\zhspace{} ZORE\zhspace{} 双重传播算法}
+\keywords{开放式关系抽取\zhspace{} ZORE\zhspace{} 实体关系抽取\zhspace{} 知识库}
 \end{abstract}
 
 \begin{enabstract}
 With the continuous development of the Internet, with the passage of time, more and more information, the traditional return search method began to meet the need to obtain the required information and knowledge resources needs, fully and effectively completed. The knowledge of the entity can be extracted from the natural language (Chinese text), the structure of the relationship between the entities, and improve the user's available information is comprehensive and efficient.
 
-The information extraction (IE) system seeks to extract semantic relations text from natural language, but most systems use specific examples of supervised learning relationships, thus limiting the availability of training data. On the other hand, an open information extraction system such as TextRunner is dedicated to handling unrestricted physical relationships obtained from the Internet.
+The information extraction (IE) system seeks to extract semantic relations text from natural language, but most systems use specific examples of supervised learning relationships, thus limiting the availability of training data. On the other hand, an open information extraction system such as TextRunner is dedicated to handling unrestricted physical relationships obtained from the Internet. And move to another domain, the user needs to name the entity relationship and manually create a new extraction rule or manually annotate the new training set example. The human workload increases linearly with the number of target entities.
 
-Traditionally, information extraction focuses on precise, narrow and pre-defined requirements. Such as extracting time and place from certain meeting notifications. And move to another domain, the user needs to name the entity relationship and manually create a new extraction rule or manually annotate the new training set example. The human workload increases linearly with the number of target entities.
-
-Open relational extraction (ORE) is an entity relationship extraction that overcomes the shortcomings of traditional information extraction (IE), the traditional information acquisition techniques for each relational model to develop their extractors.
-
-English ORE has many popular systems, such as OLLIE, ReVerb and Exemplar. However, ORE in other languages ​​is basically no relevant research report. The graduation design uses a system based on parsing. ZORE (Zh ORE) simplifies the relationship between Chinese text and semantic models. Zore defines the candidate relationship from the automatic resolution dependency tree, and then passes the entity's relationship and semantic pattern continually through the new dual-propagation algorithm.
+Open relational extraction (ORE) is an entity relationship extraction that overcomes the shortcomings of traditional information extraction (IE), the traditional information acquisition techniques for each relational model to develop their extractors. English ORE has many popular systems, such as OLLIE, ReVerb and Exemplar. However, ORE in other languages ​​is basically no relevant research report. The graduation design uses a system based on parsing. ZORE (Zh ORE) simplifies the relationship between Chinese text and semantic models. Zore defines the candidate relationship from the automatic resolution dependency tree, and then passes the entity's relationship and semantic pattern continually through the new dual-propagation algorithm.
 
 This article introduces the introduction and implementation of the Entity Relationship Extraction System (ZORE), and introduces the components required by ZORE and applies it to the actual project.
 
-\enkeywords{Open relation extratction, ZORE, Double propagation algorithm}
+\enkeywords{open relation extratction, ZORE, entity extraction, knowledge base}
 \end{enabstract}
 
