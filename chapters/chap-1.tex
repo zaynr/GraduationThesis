@@ -6,6 +6,7 @@
 也包括了介绍国内外对于本课题的研究现状和本文的研究内容。
 
 \section{研究背景与意义}
+
 \subsection{研究背景}
 
 传统的信息提取涉及很多人为因素的干扰，包括手工制定的规则或手工标注出来的样例来作为机器学习的输入数据，从而识别并判断在文本中两个实体之间的特定关系\citep{wang}。即使机器学习可以帮助枚举出潜在的可供提取的关系模式，但这个方式常常受制于提取已经被预定义的关系集。并且，这个方式不能适用于如今充斥着大量信息的互联网，特别是非结构化、未预先定义实体关系的信息。
@@ -24,13 +25,92 @@ ZORE 是被应用于网络文本来提取普遍意义上的关系和它们的语
 \caption{分析样例句子}\label{fig:sentence1}
 \end{figure}
 
-\subsection{预测短语（predicate phrase）}
-预测短语是包括至少一个动词或系词，并在语句构成上控制至少一个名词的词语序列。例如，图 1.1 里的预测短语是“就职”。为了预防“少动词结构”的情况出现，动词和它所直接“控制”的对象共同被认为是一个“预测短语”。介词并不被包括在预测短语的范围中。
+\subsection{谓词短语（predicate phrase）}
+谓词短语是包括至少一个动词或系词，并在语句构成上控制至少一个名词的词语序列。例如，图 1.1 里的谓词短语是“就职”。为了预防“少动词结构”的情况出现，动词和它所直接“控制”的对象共同被认为是一个“谓词短语”。介词并不被包括在谓词短语的范围中。
 
 \subsection{参数（argument）}
-参数是一个被预测短语所直接控制或通过介词间接控制的基本名词短语。例如，图 1.1 里的“侯建国校长”和“中国科学技术大学”就是预测短语“就职”的两个参数。
+参数是一个被谓词短语所直接控制或通过介词间接控制的基本名词短语。例如，图 1.1 里的“侯建国校长”和“中国科学技术大学”就是谓词短语“就职”的两个参数。
 
 \subsection{关系（relation）}
-一个“二元关系”是一个包括了预测短语 pred 和它的两个参数 x 与 y 的三元组。依此类推，一个“n 元关系”则包括了 n 个参数。例如，图 1.1 里的句子包含了一个二元关系（x[侯建国校长], pred[就职], y[中国科学技术大学]）。在英文语境下，二元关系的两个参数通常分别位于 pred 的左边和右边。因此，弱模式对于英文语境下的的关系抽取非常有效。然而在中文语境下，二元关系的两个关系有可能都在 pred 的左边（例如“我和你打架”），都在 pred 的右边（例如“抄袭了我的作业”），或者一左一右分布在 pred 的两边，即根据不同的句子，出现的关系模式可能为（x, y, pred），（pred, x, y）和（x, pred, y）。从而让关系短语的探测变得更加复杂。
+一个“二元关系”是一个包括了谓词短语 pred 和它的两个参数 x 与 y 的三元组。依此类推，一个“n 元关系”则包括了 n 个参数。例如，图 1.1 里的句子包含了一个二元关系（x[侯建国校长], pred[就职], y[中国科学技术大学]）。在英文语境下，二元关系的两个参数通常分别位于 pred 的左边和右边。因此，弱模式对于英文语境下的的关系抽取非常有效。然而在中文语境下，二元关系的两个关系有可能都在 pred 的左边（例如“我和你打架”），都在 pred 的右边（例如“抄袭了我的作业”），或者一左一右分布在 pred 的两边，即根据不同的句子，出现的关系模式可能为（x, y, pred），（pred, x, y）和（x, pred, y）。从而让关系短语的探测变得更加复杂。
 
 \subsection{句法模式（syntactic pattern）}
+句法模式是一个关系的句法抽象，一个关系可以被推广到字词的组合、POS 标签（Part of speech，词性标注标签）和句法依赖标志。例如，图 1.1 中的句法模式是\{nsubj-NR(A), Pred[就职], prep-于, pobj-NN(A)\}。它由四个子模式组成。第一个子模式 nsubj-NR(A) 表示当前的短语扮演着具有 POS 标签 NR （proper nouns，专有名词）的谓词短语的主语，在这里（A）意味着这个短语是被提取出的关系中的参数。第二个子模式表示图 1.1 中的样例句子谓词短语是“就职”。并且在谓词和参数中的字词（例如 prep-于）被直接包括在模式中。
+
+\subsection{语义标志（semantic signature）}
+一个关系里的语义标志包括着参数的语义分类。图 1.1 中的语义标志是（Af, Di），其中 Af 表示“人类”，Di 表示“院校”。
+
+\subsection{语义模式（semantic pattern）}
+语义模式是一个关系里的语义抽象。它是由句法模式和语义标志结合成的。例如，句法模式\{nsubj-NR(A), Pred[就职], prep-于, pobj-NN(A)\}与语义标志（Af，Di）结合，就生成了语义模式{nsubj-NR(Af), Pred[就职], prep-于, pobj-NN(Di)}。
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=15cm]{ZORE}
+\caption{ZORE 体系结构}\label{fig:ZORE}
+\end{figure}
+
+\section{ZORE 的简介}
+ZORE 的体系结构如图 1.2 所示。它由三个部件组成。第一个部件是候选关系提取器，这个提取器获取输入的文本然后进行句子的分割、字词的分割、添加 POS 标签、句法解析、基本的 NP（noun phrase，名词短语） 提取、轻量化的动词结构（LVC，light verb structure）探测和候选关系提取。它的输出是所有候选关系的集合。第二个部件对关系进行添加标签，然后通过双重拓展算法提取语义模式。第三个部件则将被提取出的模式进行同义词集分组，关系则依据“可信分数”进行过滤。
+
+\subsection{提取候选关系}
+
+\subsubsection{解析与基本的 NP 提取}
+ZORE 通过应用一系列的 NLP（Natural Language Process，自然语言处理）工具对输入的文本进行流水线处理来分析句法结构。每个句子都通过 Stanford 分割器\citep{chang2008}被分割为一个字词列表，并通过 ZPar \citep{zhang2011}来进行解析，通过标准 CTB \citep{xue2005}来添加 POS 标志和分析结构组成。并对最后生成的构成树使用 Stanford 解析器\citep{chang2008}将其变形为有 Stanford dependencies 的投影树。
+
+接下去，基本的 NPs （名词短语）从依赖树中被提取出来，在这里基本 NP 是一个最大短语，其字词只能拥有来自表 1.1 第一行的 POS。基本 NP 的第一个词可以是一个名词，一个代词，一个数字或是一个量词（表 1.1 的第二行）。基本 NP 里的依赖标签只能来自表 1.1 的第三行。所以，很明显的，一个基本 NP 并不包含其他的基本 NP，并且它本身也不被其他的 NP 所包含。
+
+\begin{longtable}{cc}
+% 首页表头
+\caption[基本 NP 标志表]{基本 NP 标志表} \label{tab:longtable} \\
+\toprule[1.5pt]
+  & 标志\\
+\midrule[1pt]
+\endfirsthead
+% 续页表头
+\caption[]{（续）} \\
+\toprule[1.5pt]
+  & 标志\\
+\midrule[1pt]
+\endhead
+% 首页表尾
+\hline
+\multicolumn{2}{r}{\small 续下页}
+\endfoot
+% 续页表尾
+\bottomrule[1.5pt]
+\endlastfoot
+基本 NP 修饰语   &   NN (common noun), M (measure word), \\
+    &   CD (cardinal number), OD (ordinal number),\\
+    &   PN (pronoun), NR(proper noun),\\
+    &   NT (temporal noun), \\
+    &   JJ (other noun-modiﬁer), or PU (punctuation) \\
+    \hline
+基本 NP 中的标签  &   nn (noun compound modiﬁer), conj (conjunct),\\
+    &   nummod (number modiﬁer),\\
+    &   cc (coordinating conjunction),\\
+    &   clf (classiﬁer modiﬁer), det (determiner),\\
+    &   ordmod (ordinal number modiﬁer),\\
+    &   punct (punctuation),\\
+    &   dep (other dependencies),\\
+    &   or amod (adjectival modiﬁer) \\
+    \hline
+基本 NP 开头    &   NN (common noun), M (measure word), \\
+    &   CD (cardinal number), OD (ordinal number),\\
+    &   PN (pronoun), NR(proper noun),\\
+    &   NT (temporal noun) \\
+    \hline
+基本 NP 到谓词的过渡标签  &   nsubj (nominal subject), conj (conjunct),\\
+    &   dobj (direct object), advmod (adverbial modiﬁer),\\
+    &   prep (preposi-tional modiﬁer),\\
+    &   pobj (prepositional object), lobj (localizer object),\\
+    &   range (dative object that is a quantiﬁerphrase),\\
+    &   tmod (temporal modiﬁer),\\
+    &   plmod (localizer modiﬁer of a preposition),\\
+    &   attr (attributive), loc (local-izer),\\
+    &   top (topic), xsubj (controlling subject),\\
+    &   ba (“ba” construction),\\
+    &   nsubjpass (nominal passive subject) \\
+    \hline
+\note{包含了 POS 标志和依赖标签，在前三行的标签被用来进行基本 NP 的提取，而最后一行中的标签用于从基本 NP 遍历到谓词短语}
+\end{longtable}
+
