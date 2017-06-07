@@ -1,3 +1,3 @@
-latexmk main > log.txt
+latexmk main
 latexmk -c
 main.pdf

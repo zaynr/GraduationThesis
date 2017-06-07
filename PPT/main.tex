@@ -2,7 +2,7 @@
 \mode <presentation>
 \usetheme{Madrid}%%Warsaw [secheader]
 %\usecolortheme{beaver}
-\beamersetaveragebackground{black!10}
+%\beamersetaveragebackground{black!10}
 
 \setbeamercovered{transparent}
 %\setbeamertemplate{navigation symbols}{}
@@ -17,7 +17,7 @@
 %  \vbox{}
   \vfill
   \begin{centering}
-  \includegraphics[height=2.0cm]{ustc_logo_fig.pdf}
+  \includegraphics[height=2.0cm]{figures/ustc_logo_fig.pdf}
         \vskip0.6em\par%
     \begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}
       \usebeamerfont{title}\inserttitle\par%
@@ -49,7 +49,7 @@
   \vfill
 }
 
-%\hypersetup{pdfpagemode=FullScreen} % makes your presentation go automatically to full screen
+\hypersetup{pdfpagemode=FullScreen} % makes your presentation go automatically to full screen
 
 \usepackage{fontspec,xunicode,xltxtra}
 
@@ -66,7 +66,7 @@
 
 \title{中文知识关系抽取的研究与实现}	%幻灯片标题
 \author[曾锃煜]{曾锃煜}
-\def\advisor{陈欢欢教授}
+\def\advisor{陈欢欢\quad 教授}
 
 \institute[中国科学技术大学]{中国科学技术大学，计算机科学与技术系}	%作者单位
 \date{\today}
@@ -94,108 +94,133 @@
 
 \section{概述}
 
-\begin{frame}
-\frametitle{研究背景}
-\begin{itemize}
-\item<1-> 传统关系抽取
-\item<2-> 开放式关系抽取
-\end{itemize}
+\begin{frame}{研究背景}
+  \begin{block}{传统关系抽取}
+    \begin{itemize}
+      \item 优点：提取关系基于匹配规则，速度快
+      \item 缺点：规则需要预先定义，适用范围窄
+    \end{itemize}
+  \end{block}
+  \pause
+  \begin{block}{开放式关系抽取}
+    \begin{itemize}
+      \item 优点：应用范围广，只需要语料库作为输入数据即可进行处理
+      \item 缺点：初始信息少、语义类别难确定、依赖于训练语料
+    \end{itemize}
+  \end{block}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{中文开放式关系抽取实现方式}
 
-\begin{frame}
-\frametitle{自然语言处理}
-\begin{itemize}
-\item 一二三四五
-\item \alert{六七八九十}
-\end{itemize}
-\pause
-一二三四五
+\begin{frame}{分词与依存句法分析}
+      \epsfig{figure=figures/dependency.PNG,width=\textwidth}
+  % \begin{columns}
+  %   \begin{column}{0.70\textwidth}
+  %     \epsfig{figure=figures/dependency.PNG,width=\textwidth}
+  %   \end{column}
+  %   \begin{column}{0.30\textwidth}
+  %     \begin{block}{解释}
+  %       \begin{itemize}
+  %         \item ATT:定中关系
+  %         \item SBV:主谓关系
+  %         \item VOB:动宾关系
+  %       \end{itemize}
+  %     \end{block}
+  %   \end{column}
+  % \end{columns}
 \end{frame}
 
-\begin{frame}
-\frametitle{依存句法分析}
-\begin{itemize}
-\item 数
-\item \alert{六七八九十}
-\end{itemize}
-\pause
-一二三四五
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section{方法一}
-
-\begin{frame}
-\frametitle{USTC}
-
-\begin{itemize}
-\item<1-> USTC,ABCD EFG HIJK LMN OPQ RST UVW XYZ
-\item<2-> USTC,abcd efg hijk lmn opq rst uvw xyz
-\end{itemize}
-
-
+\begin{frame}{提取候选关系}
+  \epsfig{figure=figures/sentence1.PNG,width=\textwidth}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{方法二}
+\section{实验}
 
-\begin{frame}
-\frametitle{公式}
-$$M=m_{ubm}+Dy$$
+\begin{frame}{评估标准}
+  \begin{description}
+    \item[精确率]<1-> $$Precision=\frac{|T|}{|A|}\times 100\%$$
+    \item[召回率]<2-> $$Recall=\frac{|T|}{|S|}\times 100\%$$
+    \item[F1 值]<3-> $$F1=\frac{2\times Precision\times Recall}{Precision+Recall}$$
+  \end{description}
+\end{frame}
+
+\begin{frame}{评估准备}
+  \epsfig{figure=figures/result.PNG,width=\textwidth}
+  \begin{block}{人工标注关系文件}
+    \begin{itemize}
+      \item 中文文本语句内的关系数量
+      \item 谓词短语
+      \item 论元内容
+      \item 论元数目
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{评估程序}
+    \begin{enumerate}
+      \item 以语义模式重复频数阈值 $t^{sem}$ 作为自变量，运行中文开放式关系抽取系统处理语料库
+      \item 按语句将机器提取的关系与人工标注的关系进行比对并统计、输出数据
+    \end{enumerate}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{方法三}
+\section{结果分析}
 
-\begin{frame}
-\frametitle{Block}
-\begin{block}{Block1}
-	\begin{itemize}
-		\item 方法三
-        \item 方法三
-	\end{itemize}
-\end{block}
-\pause
-\begin{block}{Block1}
-	\begin{itemize}
-		\item 方法三
-        \item 方法三
-	\end{itemize}
-\end{block}
+\begin{frame}{ZORE 基于“燃规3”语料库的运行结果}
+  \begin{columns}
+    \begin{column}{0.70\textwidth}
+      \epsfig{figure=figures/performance.PNG,width=\textwidth}
+    \end{column}
+    \begin{column}{0.30\textwidth}
+      \begin{block}{结论}
+        体现了先前提及的对召回率 Recall 与精确度 Precision 的平衡性权衡，F1 值最大处关系抽取系统性能最好。
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{ZORE 与 DPM 基于“燃规3”语料库的运行结果对比}
+  \begin{columns}
+    \begin{column}{0.70\textwidth}
+      \epsfig{figure=figures/compare.PNG,width=\textwidth}
+    \end{column}
+    \begin{column}{0.30\textwidth}
+      \begin{block}{结论}
+        推断是是由于该语料库是法规，文本结构较为碎片化，以上下文环境进行分析的兼类词处理难以顺利工作导致的。
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{ZORE 与 DPM 基于“燃规3”语料库的运行结果对比}
+  \begin{columns}
+    \begin{column}{0.70\textwidth}
+      \epsfig{figure=figures/comparef.PNG,width=\textwidth}
+    \end{column}
+    \begin{column}{0.30\textwidth}
+      \begin{block}{结论}
+        可以推断缺少对兼类词处理不是 ZORE 算法提升性能所遇到的瓶颈。
+      \end{block}
+    \end{column}
+  \end{columns}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{总结与展望}
+\section{错误分析}
 
-\begin{frame}
-\frametitle{实验结果}
-\begin{columns}
-\begin{column}{0.50\textwidth}
-\epsfig{figure=ustc_logo_fig,width=\textwidth}
-\end{column}
-\begin{column}{0.50\textwidth}
-\begin{block}{结论}
-\begin{itemize}
-\item 实验结果如左图所示
-\item 实验结果如左图所示
-\item 实验结果如左图所示
-\item 实验结果如左图所示
-\item 实验结果如左图所示
-\item 实验结果如左图所示
-\end{itemize}
-\end{block}
-\end{column}
-\end{columns}
+\begin{frame}{错误分析}
+  \begin{enumerate}
+    \item $t^{sem}$ 语义模式最低频率限制导致遗漏正确关系
+    \item 自然语言处理带来的错误，如将论元识别为“、构筑物”而不是“建、构筑物”
+    \item 关系模式选择错误，导致抽取出错误的关系
+  \end{enumerate}
 \end{frame}
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
